@@ -1,0 +1,6 @@
+# Fichiers python
+.venv
+tmp
+
+# Fichiers Mac
+.DS_Store
