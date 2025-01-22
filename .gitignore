@@ -4,3 +4,6 @@ tmp
 
 # Fichiers Mac
 .DS_Store
+
+# Fichiers secrets
+.env
