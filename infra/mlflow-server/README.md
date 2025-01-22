@@ -1,4 +1,4 @@
-# Serveur MLOPS
+# Serveur MLFLOW
 
 Le serveur est déployé sur huggingface et accessible via cette URL : https://david-rem-jedha-final-project-mlops.hf.space
 

@@ -1,7 +1,7 @@
 FROM continuumio/miniconda3
 
-RUN apt-get update \
-    && apt-get install nano unzip curl -y
+RUN apt-get update
+RUN apt-get install nano unzip curl -y
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
@@ -18,8 +18,7 @@ WORKDIR $HOME/app
 COPY --chown=user . $HOME/app
 
 COPY requirements.txt /requirements.txt
-RUN pip install --upgrade pip \
-    && pip install -r /requirements.txt
+RUN pip install -r /requirements.txt
 
 ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 ENV AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
@@ -27,7 +26,9 @@ ENV AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
 ENV BACKEND_STORE_URI=$BACKEND_STORE_URI
 ENV ARTIFACT_STORE_URI=$ARTIFACT_STORE_URI
 
-CMD mlflow server \
+EXPOSE $MLOPS_SERVER_PORT
+
+CMD mlflow server -p $MLOPS_SERVER_PORT \
     --host 0.0.0.0 \
     --backend-store-uri $BACKEND_STORE_URI \
     --serve-artifacts \
