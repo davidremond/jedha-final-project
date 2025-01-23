@@ -4,3 +4,8 @@ tmp
 
 # Fichiers Mac
 .DS_Store
+
+# Fichiers kaggle
+Main dataset
+Merged Data (image+text)
+*.zip
