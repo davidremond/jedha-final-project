@@ -7,3 +7,6 @@ tmp
 
 # Fichiers secrets
 .env
+
+# Dossiers des photos + csv
+data
