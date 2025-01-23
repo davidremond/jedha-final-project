@@ -10,5 +10,7 @@ tmp
 
 #Fichiers kaggle
 Main dataset
+Main_dataset
 Merged Data (image+text)
+Merged_Data_(image+text)
 *.zip
