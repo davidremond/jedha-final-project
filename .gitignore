@@ -10,3 +10,6 @@ tmp
 
 # Fichiers kaggle
 data
+
+# Fichiers secrets
+.env
