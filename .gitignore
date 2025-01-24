@@ -5,7 +5,8 @@ tmp
 # Fichiers Mac
 .DS_Store
 
+# Fichiers image
+*.png
+
 # Fichiers kaggle
-Main dataset
-Merged Data (image+text)
-*.zip
+data
