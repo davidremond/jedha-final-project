@@ -5,11 +5,12 @@ tmp
 # Fichiers Mac
 .DS_Store
 
-# Fichiers image
-*.png
-
-# Fichiers kaggle
-data
-
 # Fichiers secrets
 .env
+
+# Dossiers des photos + csv
+data
+
+confusion_matrix.png
+classification_report.txt
+
