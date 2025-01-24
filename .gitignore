@@ -10,3 +10,6 @@ tmp
 
 # Dossiers des photos + csv
 data
+
+confusion_matrix.png
+classification_report.txt
