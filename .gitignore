@@ -5,5 +5,11 @@ tmp
 # Fichiers Mac
 .DS_Store
 
+# Fichiers image
+*.png
+
+# Fichiers kaggle
+data
+
 # Fichiers secrets
 .env
