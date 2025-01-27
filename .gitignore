@@ -1,12 +1,16 @@
 # Fichiers python
 .venv
 tmp
+__pycache__
 
 # Fichiers Mac
 .DS_Store
 
 # Fichiers secrets
 .env
+
+# Fichiers mlflow
+mlruns
 
 # Dossiers des photos + csv
 data
