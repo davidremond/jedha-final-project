@@ -8,9 +8,9 @@ Get-Content $envFilePath | ForEach-Object {
     $value = $value.Trim()
     [System.Environment]::SetEnvironmentVariable($key, $value, [System.EnvironmentVariableTarget]::Process)
 }
-
-docker build . -t jedha-final-project-api
 docker rm jedha-final-project-api -f
+docker image rm jedha-final-project-api
+docker build . -t jedha-final-project-api
 docker run --name jedha-final-project-api `
     --detach `
     --volume ./src:/app `
