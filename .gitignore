@@ -17,4 +17,4 @@ data
 confusion_matrix.png
 classification_report.txt
 roc_curve.png
-
+mlruns
