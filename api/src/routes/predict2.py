@@ -1,6 +1,7 @@
+# une prediction binaire malade/sain puis si malade une prediction à 7 classes
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
-from routes.predictModels import PredictionResult, PredictionResultItem
+from routes.predictModels2 import PredictionResult, PredictionResultItem
 import io
 import mlflow
 import numpy as np
@@ -15,25 +16,27 @@ model_binaire = mlflow.pyfunc.load_model(model_path_binaire)
 model_multi = mlflow.pyfunc.load_model(model_path_multi)
 
 # vérifier si 0 et 1 ok après data augmentation
-class_names_binaire = ["Malades", "Normal"]
+class_names_binaire = ["Disease", "Healthy"]
 class_names_multi = ["Chest changes", "Degenerative infectious diseases", "Encapsulated lesions", "Higher density",
                "Lower density", "Mediastinal changes", "Obstructive pulmonary diseases"]
                
 router = APIRouter()
 
-@router.get("/predict2", 
+@router.post("/predict2", 
              response_model=PredictionResult,
-             description="Predict if the X-ray image has a pathology, and if yes predicts which one.")
+             description="Predict if the X-ray image has a pathology, and if yes predicts which one (among 7 possibilities).")
 async def predict2(
     file: UploadFile = File(..., description="Upload the X-ray image file here (png or jpg).", title="X-ray Image File", include_in_schema=False)):
     contents = await file.read()
 
-    image = Image.open(io.BytesIO(contents))#.convert('RGB')
-    # à refaire : une unique image, pour tous les modeles on se met en size (224,224)
-    image_binaire = image.resize((128, 128)) #si modele final = VGG19, mettre : (224,224)
+    image_binaire = Image.open(io.BytesIO(contents)).convert('RGB')
+    image_multi = Image.open(io.BytesIO(contents)) 
+    # à refaire : une unique taille d'image, pour tous les modeles : on se met en size (224,224)
+    image_binaire = image_binaire.resize((128, 128)) #si modele final = VGG19, mettre : (224,224)
     image_binaire_array = np.array(image_binaire)
     image_binaire_array = image_binaire_array / 255.0
-    image_multi = image.resize((224,224))
+    image_binaire_array = np.expand_dims(image_binaire_array, axis=0)
+    image_multi = image_multi.resize((128,128))
     image_multi_array = np.array(image_multi)
     image_multi_array = image_multi_array / 255.0
     image_multi_array = np.expand_dims(image_multi_array, axis=0)
@@ -42,7 +45,7 @@ async def predict2(
     predicted_binaire_class = np.argmax(prediction_binaire) 
     class_binaire_name = class_names_binaire[predicted_binaire_class]
 
-    if class_binaire_name == 'Normal':
+    if class_binaire_name == 'Healthy':
         ranking = sorted(
             [PredictionResultItem(name=class_names_binaire[i], ratio=conf * 100, displayed_ratio=f'{round(float(conf * 100), 1)} %') for i, conf in enumerate(prediction_binaire[0])],
             key=lambda x: x.Ratio,

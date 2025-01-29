@@ -17,7 +17,7 @@ async def global_exception_handler(_: Request, ex: Exception):
         content={"detail": str(ex)}
     )
 
-#app.include_router(predict.router, prefix="/api/v1")
+app.include_router(predict.router, prefix="/api/v1")
 app.include_router(predict2.router, prefix="/api/v1")
 app.include_router(zones.router, prefix="/api/v1")
 app.include_router(samples.router, prefix="/api/v1")

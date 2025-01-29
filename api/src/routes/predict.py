@@ -1,4 +1,4 @@
-# une unique prediction a 8 classes
+# une unique prediction à 8 classes
 
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
