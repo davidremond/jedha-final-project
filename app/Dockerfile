@@ -14,4 +14,4 @@ COPY ./src .
 
 EXPOSE $DEFAULT_PORT
 
-CMD ["streamlit", "run", "app.py"]
+CMD ["streamlit", "run", "app.py", "--server.port=7860"]
