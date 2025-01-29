@@ -6,15 +6,15 @@ __pycache__
 # Fichiers Mac
 .DS_Store
 
-# Fichiers secrets
+# Variables d'env
 .env
 
-# Fichiers mlflow
-mlruns
-
-# Dossiers des photos + csv
+#Fichiers kaggle
 data
+*.zip
 
+#Fichiers MLFlow
 confusion_matrix.png
 classification_report.txt
+roc_curve.png
 
