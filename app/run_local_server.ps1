@@ -15,6 +15,6 @@ docker build . -t jedha-final-project-app
 docker run --name jedha-final-project-app `
     --detach `
     --volume ./src:/app `
-    --env PORT=$env:PORT `
+    --env PORT=$env:DEFAULT_PORT `
     --publish $env:PORT`:$env:DEFAULT_PORT `
     jedha-final-project-app

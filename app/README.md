@@ -7,7 +7,7 @@ Vérifier que l'environnement virtuel Python du dépôt est correctement install
 Créer le fichier **.env** dans le dossier **app** et définir les valeurs suivantes :
 
 ```
-DEFAULT_PORT=8501 # Port par défaut de streamlit
+DEFAULT_PORT=7860 # Port par défaut de streamlit
 PORT=6002 # Port de l'application
 ```
 
