@@ -1,3 +1,5 @@
+# une unique prediction a 8 classes
+
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
 from routes.predictModels import PredictionResult, PredictionResultItem
