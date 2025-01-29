@@ -27,7 +27,7 @@ class PredictionResultItem(BaseModel):
     DisplayedRatio : str = Field(
         alias="displayed_ratio",
         description="Displayed confidence percentage of the prediction.",
-        example="65.6%"
+        example="65.6 %"
         )
 
 class PredictionResult(BaseModel):
