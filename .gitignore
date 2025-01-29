@@ -1,6 +1,7 @@
 # Fichiers python
 .venv
 tmp
+__pycache__
 
 # Fichiers Mac
 .DS_Store
@@ -16,3 +17,4 @@ data
 confusion_matrix.png
 classification_report.txt
 roc_curve.png
+
