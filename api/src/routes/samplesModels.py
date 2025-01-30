@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Literal, Dict
+from typing import ByteString, List, Literal, Dict
 
 class SimilarXRaysResult(BaseModel):
     """
@@ -10,7 +10,7 @@ class SimilarXRaysResult(BaseModel):
         alias="samples", 
         description="List of sample images by pathology.", 
         example=[
-            {"Normal": ['images/Normal/img1.png', 'images/Normal/img2.png', 'images/Normal/img3.png' ]}, 
-            {"Chest_Changes": ['images/Chest_Changes/img1.png', 'images/Chest_Changes/img2.png', 'images/Chest_Changes/img3.png' ]}, 
+            {"Normal": ['/9j/4AAQSZ....', '/9j/4AAkZJ...', '/9j/4AAQSk...' ]}, 
+            {"Chest_Changes": ['/9j/4AAQSZ....', '/9j/4AAkZJ...', '/9j/4AAQSk...' ]}
             ]
         )
