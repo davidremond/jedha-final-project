@@ -18,6 +18,7 @@ hide_streamlit_style = """
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
             header {visibility: hidden;}
+            .stMainBlockContainer {padding-top: 0rem; padding-bottom: 0rem;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -105,7 +106,24 @@ with col3:
 
     if uploaded_file is not None:
         st.markdown("Here are some samples of chest x-ray images :")
+        
+        # Get similar xrays
+        api_url = f"{API_BASE_URL}/similar_xrays"
+        class_names = [f"class_names={item['name'].lower()}" for item in result['ranking'] if item['ratio'] > 0.1]
+        class_names = str.join("&", class_names)
         with st.spinner('Pending analysis...'):
-            st.write("TODO : Call API")
+            print(f'{api_url}?{class_names}')
+            response = requests.get(f'{api_url}?{class_names}')
+        xrays_result = response.json()
+        
+        # Display similar xrays
+        for class_name, images in xrays_result['samples'].items():
+            st.markdown(f"**{class_name.title()}**")
+            cols = st.columns(len(images), gap="small", vertical_alignment="top", border=False)
+            for i, image in enumerate(images):
+                with cols[i]:
+                    st.image(f"data:image/png;base64,{image}")
+        
+        
     else:
         st.write("Please upload a chest x-ray image.")
