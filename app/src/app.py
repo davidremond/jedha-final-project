@@ -2,8 +2,9 @@ import os
 import requests
 import plotly.express as px
 import streamlit as st
-from PIL import Image
 import base64
+from PIL import Image
+
 
 API_BASE_URL = os.getenv("API_BASE_URL")
 GREEN_COLOR = "#4CAF50"
@@ -16,14 +17,14 @@ def get_base64_image(image_path):
         return base64.b64encode(img_file.read()).decode("utf-8")
 
 # Chemins des images
-SPLASH_IMAGE = "/images/image_splash_screen.jpg"
-IMAGE_1 = "/images/image_1.jpg"
-IMAGE_2 = "/images/image_2.jpg"
-IMAGE_3 = "/images/image_3.jpg"
-IMAGE_4 = "/images/image_4.jpg"
-IMAGE_5 = "/images/image_5.jpg"
-IMAGE_6 = "/images/image_6.jpg"
-IMAGE_7 = "/images/image_7.jpg"
+SPLASH_IMAGE = "images/image_splash_screen.jpg"
+IMAGE_1 = "images/image_1.jpg"
+IMAGE_2 = "images/image_2.jpg"
+IMAGE_3 = "images/image_3.jpg"
+IMAGE_4 = "images/image_4.jpg"
+IMAGE_5 = "images/image_5.jpg"
+IMAGE_6 = "images/image_6.jpg"
+IMAGE_7 = "images/image_7.jpg"
 
 # Convertir les images nécessaires en base64
 splash_image_base64 = get_base64_image(SPLASH_IMAGE)
@@ -191,8 +192,7 @@ elif current_step == "transition":
     """,
         unsafe_allow_html=True
 )
-    
-    auto_refresh("main", delay=6000) 
+    auto_refresh("main", delay=6000)
     
 # Étape 3 : Page principale
 elif current_step == "main":
