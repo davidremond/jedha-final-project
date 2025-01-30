@@ -3,15 +3,203 @@ import requests
 import plotly.express as px
 import streamlit as st
 from PIL import Image
+import base64
 
 API_BASE_URL = os.getenv("API_BASE_URL")
 GREEN_COLOR = "#4CAF50"
 RED_COLOR = "#FF6347"
 
-st.set_page_config( 
-    page_title="PulmoAId",
-    layout='wide',
-    page_icon='🫁')
+
+# Fonction pour convertir une image locale en base64
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode("utf-8")
+
+# Chemins des images
+SPLASH_IMAGE = "/images/image_splash_screen.jpg"
+IMAGE_1 = "/images/image_1.jpg"
+IMAGE_2 = "/images/image_2.jpg"
+IMAGE_3 = "/images/image_3.jpg"
+IMAGE_4 = "/images/image_4.jpg"
+IMAGE_5 = "/images/image_5.jpg"
+IMAGE_6 = "/images/image_6.jpg"
+IMAGE_7 = "/images/image_7.jpg"
+
+# Convertir les images nécessaires en base64
+splash_image_base64 = get_base64_image(SPLASH_IMAGE)
+
+# Définir et lire les paramètres d'URL
+query_params = st.query_params
+current_step = query_params.get("step", "splash")
+
+# Simuler un rafraîchissement automatique avec JavaScript
+def auto_refresh(step, delay=3000):
+    st.markdown(
+        f"""
+        <meta http-equiv="refresh" content="{delay / 1000}; url=/?step={step}">
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Étape 1 : Splash Screen
+if current_step == "splash":
+    st.markdown(
+        f"""
+        <style>
+        .splash-container {{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }}
+        .splash-image {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }}
+        .text-overlay {{
+            position: absolute;
+            bottom: 7%;
+            color: white;
+            font-size: 6rem;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            width: 100%;
+        }}
+        </style>
+        <div class="splash-container">
+            <img src="data:image/png;base64,{splash_image_base64}" class="splash-image">
+            <div class="text-overlay">PulmoAId</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    auto_refresh("transition", delay=3000)
+
+# Étape 2 : Page de Transition
+elif current_step == "transition":
+    # Ajouter une version centrée et réduite du texte
+    st.markdown(
+        """
+        <style>
+        .title-container {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            font-size: 2rem; 
+            display: block;
+            margin-top: 5px;
+        }
+        .caption {
+            text-align: center;
+            font-size: 1rem;
+            color: white;
+            margin-top: 5px;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-item {
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 5px;
+        }
+        </style>
+        <div class="title-container">
+            <span>The app that will help you diagnose these</span>
+            <br>
+            <span class="subtitle">7 lung diseases:</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Disposition des images en lignes
+    st.markdown(
+        f"""
+        <div class="image-container">
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_1)}" alt="Image 1">
+                <div class="image-caption">Higher density</div>
+            </div>
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_2)}" alt="Image 2">
+                <div class="image-caption">Lower density</div>
+            </div>
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_3)}" alt="Image 3">
+                <div class="image-caption">Chest changes</div>
+            </div>
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_4)}" alt="Image 4">
+                <div class="image-caption">Encapsulated Lesions</div>
+            </div>
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_5)}" alt="Image 5">
+                <div class="image-caption">Obstructive Pulmonary Diseases</div>
+            </div>
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_6)}" alt="Image 6">
+                <div class="image-caption">Mediastinal Changes</div>
+            </div>
+            <div class="image-item">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_7)}" alt="Image 7">
+                <div class="image-caption">Degenerative Infectious Diseases</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Liste des créateurs
+    st.markdown(
+    """
+    <style>
+    .creator-list {
+        text-align: center;
+        font-size: 1.15rem;
+        font-weight: bold;
+        color: white;
+        margin-top: 40px;
+    }
+    </style>
+    <div class="creator-list">
+        Made by: Sophie Laussel, Eugénie Modolo, Juliette Rodrigues, David Remond
+    </div>
+    """,
+        unsafe_allow_html=True
+)
+    
+    auto_refresh("main", delay=6000) 
+    
+# Étape 3 : Page principale
+elif current_step == "main":
+    st.set_page_config(
+        page_title="PulmoAId",
+        layout='wide',
+        page_icon='🫁')
 
 hide_streamlit_style = """
             <style>
