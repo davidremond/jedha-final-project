@@ -27,35 +27,25 @@ from sklearn.utils.class_weight import compute_class_weight
 
 def preprocessing():
 
-    train_datagen = ImageDataGenerator(
-        rescale=1/255.,
-        rotation_range=180,
-        brightness_range=(0.5, 1),
-        zoom_range=0.1,
-        horizontal_flip=True,
-        vertical_flip=True,
-        validation_split=0.2  
-    )
-
-    valid_datagen = ImageDataGenerator(
+    img_generator = ImageDataGenerator(
         rescale=1/255.,
         validation_split=0.2 
     )
 
-    train_generator = train_datagen.flow_from_directory(
-        'data/Main_dataset_Sample_Binaire_With_Ratio',
+    train_generator = img_generator.flow_from_directory(
+        'data/Main_dataset_Sample_Multi7',
         target_size=(224, 224),
         batch_size=32,
-        class_mode='binary',
+        class_mode='categorical',
         subset="training",
         seed = 42
     )
 
-    valid_generator = valid_datagen.flow_from_directory(
-        'data/Main_dataset_Sample_Binaire_With_Ratio',
+    valid_generator = img_generator.flow_from_directory(
+        'data/Main_dataset_Sample_Multi7',
         target_size=(224, 224),
         batch_size=32,
-        class_mode='binary',
+        class_mode='categorical',
         subset="validation",
         seed = 42
     )
@@ -66,11 +56,11 @@ def preprocessing():
 def main():
 
     MLFLOW_SERVER_URI = 'https://david-rem-jedha-final-project-mlops.hf.space'
-    EXPERIMENT_NAME = 'binary' 
-    CLASSES = 2
+    EXPERIMENT_NAME = 'multi' 
+    CLASSES = 7
     EPOCHS = 20
     TRAINER = 'final_models' 
-    MODEL_TYPE = 'finalmodel_binary_v3' # Le type de modèle utilisé
+    MODEL_TYPE = 'finalmodel_multi7_v3' # Le type de modèle utilisé
     mlflow.set_tracking_uri(MLFLOW_SERVER_URI)
     mlflow.set_experiment(EXPERIMENT_NAME)
     mlflow.tensorflow.autolog()
@@ -78,10 +68,10 @@ def main():
 
     img_generator_flow_train, img_generator_flow_valid = preprocessing()
 
-    base_model = tf.keras.applications.VGG19(input_shape=(224, 224, 3), 
+    base_model = tf.keras.applications.InceptionV3(input_shape=(224, 224, 3), 
                                                      include_top=False,
                                                      weights = "imagenet",
-                                                     name="VGG19",
+                                                     name="InceptionV3",
                                                     )
     base_model.trainable = False
     fine_tune_at = 20
@@ -89,13 +79,10 @@ def main():
         layer.trainable = True
     
     model = tf.keras.Sequential([
-        tf.keras.layers.Input(shape=(224, 224, 1)), 
+        tf.keras.layers.Input(shape=(224, 224, 1)),
         #tf.keras.layers.Conv2D(3, (1, 1)),
         base_model, 
-        tf.keras.layers.GlobalMaxPooling2D(),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dropout(0.5),
-        #tf.keras.layers.Flatten(),
+        tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(CLASSES, activation="softmax")  
     ])  
 
@@ -109,17 +96,9 @@ def main():
 
     model.compile(
         optimizer=optimizer,
-        loss='sparse_categorical_crossentropy',
-        metrics=['accuracy']
+        loss=tf.keras.losses.CategoricalCrossentropy(),
+        metrics=[tf.keras.metrics.CategoricalAccuracy()]
     )
-
-    class_indices = img_generator_flow_train.class_indices
-    class_weights = compute_class_weight(
-        class_weight='balanced',
-        classes=np.unique(list(class_indices.values())),
-        y=img_generator_flow_train.classes
-    )
-    class_weights = dict(enumerate(class_weights))
 
     early_stopping = EarlyStopping(
         monitor='val_loss',  # Surveiller la loss de validation
@@ -132,7 +111,6 @@ def main():
         epochs=EPOCHS, 
         validation_data=img_generator_flow_valid, 
         callbacks=[early_stopping],
-        class_weight= class_weights, 
         shuffle=True,
     )
 
@@ -143,9 +121,9 @@ def main():
     history = model.history
     for epoch in range(len(history.history['loss'])):
         mlflow.log_metric('loss', history.history['loss'][epoch], step=epoch)
-        mlflow.log_metric('accuracy', history.history['accuracy'][epoch], step=epoch)
+        mlflow.log_metric('categorical_accuracy', history.history['categorical_accuracy'][epoch], step=epoch)
         mlflow.log_metric('val_loss', history.history['val_loss'][epoch], step=epoch)
-        mlflow.log_metric('val_accuracy', history.history['val_accuracy'][epoch], step=epoch)
+        mlflow.log_metric('val_categorical_accuracy', history.history['val_categorical_accuracy'][epoch], step=epoch)
     predictions = model.predict(img_generator_flow_valid)
     y_pred = np.argmax(predictions, axis=1)
     y_true = img_generator_flow_valid.classes
