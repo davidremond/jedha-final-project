@@ -100,7 +100,7 @@ with col2:
 
 with col3:
     
-    st.subheader("Samples", anchor=False)
+    st.subheader("Similar X-rays", anchor=False)
     st.html('<hr style="border: none; height: 1px; background-color: #444444;"/>')
 
     if uploaded_file is not None:
