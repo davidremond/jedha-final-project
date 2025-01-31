@@ -1,33 +1,30 @@
 # une prediction binaire malade/sain puis si malade une prediction à 7 classes
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
-from routes.predictModels2 import PredictionResult, PredictionResultItem
+from utils.cache import load_model_cached
+from routes.predict_models import PredictionResult, PredictionResultItem
 import io
-import mlflow
 import numpy as np
 import os
 
-mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
-model_path_binaire = os.environ.get('MODEL_PATH_BINAIRE')
-model_path_multi = os.environ.get('MODEL_PATH_MULTI7')
-
-mlflow.set_tracking_uri(mlops_server_uri)
-model_binaire = mlflow.pyfunc.load_model(model_path_binaire)
-model_multi = mlflow.pyfunc.load_model(model_path_multi)
+binary_model = load_model_cached(os.environ.get('MODEL_PATH_BINAIRE'))
+multi_class_model = load_model_cached(os.environ.get('MODEL_PATH_MULTI7'))
 
 # vérifier si 0 et 1 ok après data augmentation
 class_names_binaire = ["Disease", "Healthy"]
 class_names_multi = ["Chest changes", "Degenerative infectious diseases", "Encapsulated lesions", "Higher density",
                "Lower density", "Mediastinal changes", "Obstructive pulmonary diseases"]
-               
+
 router = APIRouter()
 
-@router.post("/predict2", 
+@router.post("/predict", 
              response_model=PredictionResult,
-             description="Predict if the X-ray image has a pathology, and if yes predicts which one (among 7 possibilities).")
-async def predict2(
+             description="Predict if the X-ray image has a pathology, and if yes predicts which one (among 7 pathologies).")
+async def predict(
     file: UploadFile = File(..., description="Upload the X-ray image file here (png or jpg).", title="X-ray Image File", include_in_schema=False)):
     contents = await file.read()
+
+    
 
     image_binaire = Image.open(io.BytesIO(contents)).convert('RGB')
     image_multi = Image.open(io.BytesIO(contents)) 
@@ -41,7 +38,7 @@ async def predict2(
     image_multi_array = image_multi_array / 255.0
     image_multi_array = np.expand_dims(image_multi_array, axis=0)
 
-    prediction_binaire = model_binaire.predict(image_binaire_array)
+    prediction_binaire = binary_model.predict(image_binaire_array)
     predicted_binaire_class = np.argmax(prediction_binaire) 
     class_binaire_name = class_names_binaire[predicted_binaire_class]
 
@@ -59,7 +56,7 @@ async def predict2(
         )
 
     else:
-        prediction_multi = model_multi.predict(image_multi_array)
+        prediction_multi = multi_class_model.predict(image_multi_array)
         predicted_multi_class = np.argmax(prediction_multi) 
         class_multi_name = class_names_multi[predicted_multi_class]
         ranking = sorted(

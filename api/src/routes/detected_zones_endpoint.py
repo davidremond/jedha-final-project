@@ -4,28 +4,11 @@ import tensorflow as tf
 import numpy as np
 import os
 import cv2
-import matplotlib.pyplot as plt
 from fastapi import APIRouter, File, UploadFile
-from routes.detectedzonesModels import DetectedZonesResult
+from utils.cache import load_model_cached
+from routes.detected_zones_models import DetectedZonesResult
 
-mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
-model_path_multi = "models:/lung_7_classes/2" #os.environ.get('MODEL_PATH_MULTI7')
-
-mlflow.set_tracking_uri(mlops_server_uri)
-keras_model = mlflow.keras.load_model(model_path_multi)
-
-# Load Model from MLflow
-def load_model_from_mlflow(server_uri, model_path):
-    """
-    Load a model from an MLflow tracking server.
-    """
-    print(f"Loading model from {server_uri} at {model_path}...")
-    keras_model = mlflow.keras.load_model(model_path)
-
-    # Print model summary
-    keras_model.summary()
-
-    return keras_model
+keras_model = load_model_cached(os.environ.get('MODEL_PATH_MULTI7'))
 
 # Extract Base Model (if needed)
 def initialize_submodel(keras_model, submodel_index=1):
@@ -118,7 +101,7 @@ router = APIRouter()
 @router.post("/detected_zones", 
             response_model=DetectedZonesResult, 
             description="Detect zones in the X-ray image.")
-async def zones(
+async def detected_zones(
     file: UploadFile = File(..., 
                             description="Upload the X-ray image file here.", 
                             title="X-ray Image File", 

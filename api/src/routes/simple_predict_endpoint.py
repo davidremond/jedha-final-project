@@ -2,27 +2,24 @@
 
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
-from routes.predictModels import PredictionResult, PredictionResultItem
+from utils.cache import load_model_cached
+from routes.simple_predict_models import PredictionResult, PredictionResultItem
 import io
 import mlflow
 import numpy as np
 import os
 
-mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
-model_path = os.environ.get('MODEL_PATH')
-
-mlflow.set_tracking_uri(mlops_server_uri)
-model = mlflow.pyfunc.load_model(model_path)
+model = load_model_cached(os.environ.get('MODEL_PATH'))
 
 class_names = ["Chest changes", "Degenerative infectious diseases", "Encapsulated lesions", "Higher density",
                "Lower density", "Mediastinal changes", "Normal", "Obstructive pulmonary diseases"]
                
 router = APIRouter()
 
-@router.post("/predict", 
+@router.post("/simple_predict", 
              response_model=PredictionResult,
              description="Predict if the X-ray image has a pathology.")
-async def predict(
+async def simple_predict(
     file: UploadFile = File(..., description="Upload the X-ray image file here.", title="X-ray Image File", include_in_schema=False)):
     contents = await file.read()
 
