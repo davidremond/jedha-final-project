@@ -37,6 +37,7 @@ def replace_spaces_with_underscores(directory):
 
 def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
 
+    random.seed(42) 
     multi_sample_dir = str(source_dir)+"_Sample_Multi7"
     multi_sample_test_dir = str(source_dir)+"_Sample_Multi7_Test"
 
@@ -78,6 +79,7 @@ def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
 
 def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', ratio_sample=1):
 
+    random.seed(42) 
     binary_sample_dir = str(source_dir)+"_Sample_Binaire_With_Ratio"
     binary_sample_test_dir = str(source_dir)+"_Sample_Binaire_Test"
 
