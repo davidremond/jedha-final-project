@@ -54,7 +54,7 @@ def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
 
     total_images_perclass = len(os.listdir(os.path.join(source_dir, malades_classes[0])))
     images_test_count = int(test_ratio * total_images_perclass)
-    images_train_count = int((total_images_perclass - images_test_count)*ratio_sample)
+    #images_train_count = int((total_images_perclass - images_test_count)*ratio_sample)
 
     for class_name in malades_classes:
         class_path = os.path.join(source_dir, class_name)
@@ -62,7 +62,7 @@ def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
         random.shuffle(images)
 
         test_images = images[:images_test_count]
-        train_images = images[images_test_count:(images_test_count+images_train_count)]
+        train_images = images[images_test_count:total_images_perclass]
 
         dir_train = os.path.join(multi_sample_dir, class_name)
         for img in train_images:
@@ -101,15 +101,15 @@ def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', rat
 
     normal_total_images = len(os.listdir(os.path.join(source_dir, normal_classes[0])))
     normal_test_count = int(test_ratio * normal_total_images)
-    normal_train_count = int((normal_total_images - normal_test_count)*ratio_sample)
+    #normal_train_count = int((normal_total_images - normal_test_count)*ratio_sample)
 
     malades_total_images = normal_total_images * 7
     malades_tokeep_images = int(normal_total_images*ratio_malade/(1-ratio_malade))  
     malades_test_count = int(test_ratio * malades_tokeep_images)
-    malades_train_count = int((malades_tokeep_images - malades_test_count)*ratio_sample)
-    if malades_train_count < malades_total_images*ratio_sample:
-        print(f"pas assez d'images de malades pour ces ratio de malades ({ratio_malade} %) \
-            et de test ({test_ratio} %) : modifiez ces ratio")
+    #malades_train_count = int((malades_tokeep_images - malades_test_count)*ratio_sample)
+    #if malades_train_count < malades_total_images*ratio_sample:
+    #    print(f"pas assez d'images de malades pour ces ratio de malades ({ratio_malade} %) \
+    #        et de test ({test_ratio} %) : modifiez ces ratio")
 
     for class_name in normal_classes:
         class_path = os.path.join(source_dir, class_name)
@@ -117,7 +117,7 @@ def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', rat
         random.shuffle(images)
 
         test_images = images[:normal_test_count]
-        train_images = images[normal_test_count:(normal_test_count+normal_train_count)]
+        train_images = images[normal_test_count:normal_total_images]
 
         for img in train_images:
             src_path = os.path.join(class_path, img)
@@ -136,7 +136,7 @@ def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', rat
 
         test_images = images[:malades_test_count // len(malades_classes)]
         train_images = images[malades_test_count // len(malades_classes):\
-            (malades_test_count+malades_train_count) // len(malades_classes)]
+            malades_tokeep_images // len(malades_classes)]
 
         for img in train_images:
             src_path = os.path.join(class_path, img)
