@@ -24,18 +24,19 @@ st.title("PulmoAId", anchor=False)
 
 # Fonction pour convertir une image locale en base64
 def get_base64_image(image_path):
+    print(image_path)
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode("utf-8")
 
 # Chemins des images
-SPLASH_IMAGE = "images/image_splash_screen.jpg"
-IMAGE_1 = "images/image_1.jpg"
-IMAGE_2 = "images/image_2.jpg"
-IMAGE_3 = "images/image_3.jpg"
-IMAGE_4 = "images/image_4.jpg"
-IMAGE_5 = "images/image_5.jpg"
-IMAGE_6 = "images/image_6.jpg"
-IMAGE_7 = "images/image_7.jpg"
+SPLASH_IMAGE = "src/images/image_splash_screen.jpg"
+IMAGE_1 = "src/images/image_1.jpg"
+IMAGE_2 = "src/images/image_2.jpg"
+IMAGE_3 = "src/images/image_3.jpg"
+IMAGE_4 = "src/images/image_4.jpg"
+IMAGE_5 = "src/images/image_5.jpg"
+IMAGE_6 = "src/images/image_6.jpg"
+IMAGE_7 = "src/images/image_7.jpg"
 
 # Convertir les images nécessaires en base64
 splash_image_base64 = get_base64_image(SPLASH_IMAGE)
@@ -217,21 +218,6 @@ elif current_step == "main":
         API_BASE_URL = os.getenv("API_BASE_URL")
         GREEN_COLOR = "#4CAF50"
         RED_COLOR = "#FF6347"
-
-        st.set_page_config( 
-        page_title="PulmoAId",
-        layout='wide',
-        page_icon='🫁')
-
-        hide_streamlit_style = """
-                <style>
-                #MainMenu {visibility: hidden;}
-                footer {visibility: hidden;}
-                header {visibility: hidden;}
-                .stMainBlockContainer {padding-top: 0rem; padding-bottom: 0rem;}
-                </style>
-                """
-        st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
         st.title("PulmoAId", anchor=False)
 
