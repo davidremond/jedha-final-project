@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from typing import ByteString, List, Literal, Dict
 
 class DetectedZonesResult(BaseModel):
     """

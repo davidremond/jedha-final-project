@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import ByteString, List, Literal, Dict
+from typing import List, Dict
 
 class SimilarXRaysResult(BaseModel):
     """

@@ -2,11 +2,12 @@
 
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
-from routes.predictModels import PredictionResult, PredictionResultItem
+from routes.simple_predict_models import PredictionResult, PredictionResultItem
 import io
 import mlflow
 import numpy as np
 import os
+
 
 mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
 model_path = os.environ.get('MODEL_PATH')
@@ -19,10 +20,10 @@ class_names = ["Chest changes", "Degenerative infectious diseases", "Encapsulate
                
 router = APIRouter()
 
-@router.post("/predict", 
+@router.post("/simple_predict", 
              response_model=PredictionResult,
              description="Predict if the X-ray image has a pathology.")
-async def predict(
+async def simple_predict(
     file: UploadFile = File(..., description="Upload the X-ray image file here.", title="X-ray Image File", include_in_schema=False)):
     contents = await file.read()
 
@@ -42,7 +43,6 @@ async def predict(
         key=lambda x: x.Ratio,
         reverse=True
     )
-    print("round=",round(prediction[0][predicted_class]*100, 1))
     result = PredictionResult(
         has_pathology=True if predicted_class != 6 else False,
         prediction=PredictionResultItem(name=class_name, ratio=prediction[0][predicted_class]*100, displayed_ratio=f'{round(prediction[0][predicted_class]*100, 1)} %'),

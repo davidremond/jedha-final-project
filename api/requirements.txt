@@ -1,4 +1,5 @@
 fastapi[standard]
 mlflow
 keras
+opencv-python-headless
 tensorflow

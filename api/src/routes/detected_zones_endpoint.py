@@ -4,28 +4,14 @@ import tensorflow as tf
 import numpy as np
 import os
 import cv2
-import matplotlib.pyplot as plt
 from fastapi import APIRouter, File, UploadFile
-from routes.detectedzonesModels import DetectedZonesResult
+from routes.detected_zones_models import DetectedZonesResult
 
 mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
-model_path_multi = "models:/lung_7_classes/2" #os.environ.get('MODEL_PATH_MULTI7')
+model_path_multi = os.environ.get('MODEL_PATH_MULTI7')
 
 mlflow.set_tracking_uri(mlops_server_uri)
 keras_model = mlflow.keras.load_model(model_path_multi)
-
-# Load Model from MLflow
-def load_model_from_mlflow(server_uri, model_path):
-    """
-    Load a model from an MLflow tracking server.
-    """
-    print(f"Loading model from {server_uri} at {model_path}...")
-    keras_model = mlflow.keras.load_model(model_path)
-
-    # Print model summary
-    keras_model.summary()
-
-    return keras_model
 
 # Extract Base Model (if needed)
 def initialize_submodel(keras_model, submodel_index=1):
@@ -38,9 +24,6 @@ def initialize_submodel(keras_model, submodel_index=1):
     input_shape = base_model.input_shape[1:]  # Remove batch dimension
     dummy_input = np.random.random((1, *input_shape)).astype(np.float32)
     _ = base_model(dummy_input)  # Call model to initialize
-
-    print(f"Sub-model {base_model.name} initialized successfully.")
-
     return base_model
 
 # Compute Grad-CAM Heatmap
@@ -96,9 +79,6 @@ def apply_gradcam(byte_array, keras_model, layer_name):
 
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension (1, 128, 128, 3)
 
-    # Debugging print
-    print("Final img_array shape:", img_array.shape)  # Should be (1, 128, 128, 3)
-
     # Generate Grad-CAM heatmap
     heatmap = get_gradcam_heatmap(keras_model, img_array, layer_name)
 
@@ -118,7 +98,7 @@ router = APIRouter()
 @router.post("/detected_zones", 
             response_model=DetectedZonesResult, 
             description="Detect zones in the X-ray image.")
-async def zones(
+async def detected_zones(
     file: UploadFile = File(..., 
                             description="Upload the X-ray image file here.", 
                             title="X-ray Image File", 
