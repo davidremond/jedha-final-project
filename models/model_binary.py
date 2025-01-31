@@ -75,10 +75,11 @@ def main():
     mlflow.set_experiment(EXPERIMENT_NAME)
     mlflow.tensorflow.autolog()
     experiment = mlflow.get_experiment_by_name(EXPERIMENT_NAME)
+    mlflow.start_run(experiment_id = experiment.experiment_id)
 
     img_generator_flow_train, img_generator_flow_valid = preprocessing()
 
-    base_model = tf.keras.applications.VGG19(input_shape=(224, 224, 3), 
+    base_model = tf.keras.applications.InceptionV3(input_shape=(224, 224, 3), 
                                                      include_top=False,
                                                      weights = "imagenet",
                                                      name="VGG19",
@@ -173,6 +174,7 @@ def main():
     plt.xticks(rotation=45)
     plt.savefig("confusion_matrix.png")
     mlflow.log_artifact("confusion_matrix.png", artifact_path='model')
+    mlflow.end_run()
 
 
 if __name__ == "__main__":
