@@ -41,11 +41,17 @@ with col1:
         with col11:
             st.markdown("Original image")
             image = Image.open(uploaded_file)
-            st.image(image, use_container_width=False, )
+            st.image(image, use_container_width=False )
         with col12:
             st.markdown("Detection image")
-            with st.spinner('Pending analysis...'):
-                st.write("TODO : Call API")
+            if uploaded_file is not None:
+                bytes_data = uploaded_file.getvalue()
+                api_url = f"{API_BASE_URL}/detected_zones"
+                files = {'file': (uploaded_file.name, bytes_data, uploaded_file.type)}
+                with st.spinner('Pending analysis...'):
+                    response = requests.post(api_url, files=files)
+                detected_zones_result = response.json()
+                st.image(f"data:image/png;base64,{detected_zones_result['image_with_detected_zones']}", use_container_width=True)
 
 with col2:
 
