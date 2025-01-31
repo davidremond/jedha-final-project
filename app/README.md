@@ -8,8 +8,9 @@ Vérifier que l'environnement virtuel Python du dépôt est correctement install
 Créer le fichier **.env** dans le dossier **app** et définir les valeurs suivantes :
 
 ```
-DEFAULT_PORT=7860   # Port par défaut de streamlit
-PORT=6002           # Port de l'application
+DEFAULT_PORT=7860                                                              # Port par défaut de streamlit
+PORT=6002                                                                      # Port de l'application
+API_BASE_URL=https://huggingface.co/spaces/david-rem/jedha-final-project-api   # Url de base de l'API
 ```
 
 ## Exécution
