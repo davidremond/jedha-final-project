@@ -2,19 +2,46 @@
 
 ## Objectif
 
-TODO
+Notre objectif est de fournir une API et une application web qui permette de prédire la présence ou pas de pathologie sur des radios des poumons.
 
-## Structure du projet
+En cas de détection d'une pathologie, nos services sont capables de proposer la pathologie la plus probable avec un indice de confiance.
 
-TODO
+## Architecture du projet
 
+L'architecture suivante a été utilisée pour la réalisation du projet :
 
+![](architecture.png)
+
+Nous avons travaillé avec un serveur mlflow afin de maitriser les différents entrainements de différents modèles, de comparer les résultats et de choisir les modèles les plus adaptés.
+
+Les données MLFLOW sont hébergées sur AWS via les services RDS et S3.
+
+L'entrainement des modèles a été réalisé avec Google Collab Pay-as-you-go et Lightning AI Free Plan.
+
+Nous avons souhaité utiliser une API afin d'isoler nos services de l'application web et de permettre une intégration à d'autres services tiers.
+
+## Structure des dossiers
+
+Les sources sont organisés de la manière suivante :
+ - *root* :
+   - *.gitignore* : configuratuion Git
+   - *requirements.txt* : dépendances nécessaires à l'exécution du projet en local
+   - *README.md* : documentation générale du projet 
+ - *.vscode* : configuration de l'IDE Visual Studio Code
+ - *api* : image Docker, dépendances de l'API, scripts d'exécution et documentation
+   - *src* : sources de l'API
+ - *app* : image Docker, dépendances de l'application, scripts d'exécution et documentation
+   - *src* : sources de l'application
+ - *infra* : élements d'infrastructure nécessaires au projet
+   - *mlflow-server* : image Docker, dépendances du serveur mlflow et documentation
+ - *models* : modèles sélectionnés et utilisés en production
+ - *notebooks* : éléments d'explorations de données et de test d'éligibilité des modèles
 
 ## Environnement local
 
-### Prérequis techniques
+### Prérequis
 
-- python 3.12.7
+- python 3.12.x
 
 ### Installation
 
@@ -46,6 +73,9 @@ pip install #libraries_to_install#
 pip freeze > requirements.txt
 ```
 
-## Environnement de production
+# Crédits
 
-TODO
+- [Eugénie Molodo](https://github.com/Eug-M)
+- [Juliette Rodrigues](https://github.com/julietteRDC)
+- [Sophie Laussel](https://github.com/lsophie12)
+- [David Remond](https://github.com/davidremond)

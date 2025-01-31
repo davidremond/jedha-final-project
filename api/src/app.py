@@ -6,9 +6,9 @@ import uvicorn
 
 default_port = os.environ.get('DEFAULT_PORT')
 
-app = FastAPI(title="Assistance au diagnostic pulmonaire API", 
+app = FastAPI(title="PulmoAId API", 
               version="1.0.0", 
-              description="TODO")
+              description="Fournit des services de prédiction de la maladie pulmonaire à partir d'images radiologiques.")
 
 @app.exception_handler(Exception)
 async def global_exception_handler(_: Request, ex: Exception):
