@@ -150,10 +150,10 @@ def main():
     predictions = model.predict(img_generator_flow_valid)
     y_pred = np.argmax(predictions, axis=1)
     y_true = img_generator_flow_valid.classes
-    report = classification_report(y_true, y_pred, output_dict=True)
     report = classification_report(y_true, y_pred)
     with open("classification_report.txt", "w") as file:
         file.write(report)
+    report = classification_report(y_true, y_pred, output_dict=True)
     mlflow.log_artifact('classification_report.txt', artifact_path="model")
     mlflow.log_metric('global_accuracy', report['accuracy'])
     mlflow.log_metric('macro_avg_precision', report['macro avg']['precision'])
