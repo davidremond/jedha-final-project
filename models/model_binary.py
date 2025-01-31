@@ -78,7 +78,7 @@ def main():
 
     img_generator_flow_train, img_generator_flow_valid = preprocessing()
 
-    base_model = tf.keras.applications.VGG19(input_shape=(224, 224, 3), 
+    base_model = tf.keras.applications.InceptionV3(input_shape=(224, 224, 3), 
                                                      include_top=False,
                                                      weights = "imagenet",
                                                      name="VGG19",

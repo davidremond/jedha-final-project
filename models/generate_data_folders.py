@@ -32,7 +32,7 @@ def replace_spaces_with_underscores(directory):
                 old_path = os.path.join(root, name)
                 new_path = os.path.join(root, new_name)
                 shutil.move(old_path, new_path)
-                print(f"Renamed: {old_path} -> {new_path}")
+                #print(f"Renamed: {old_path} -> {new_path}")
 
 
 def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
@@ -52,7 +52,7 @@ def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
         os.makedirs(dir_train, exist_ok=True)
         os.makedirs(dir_test, exist_ok=True)
 
-    total_images_perclass = len(os.listdir(os.path.join(source_dir, malades_classes[0])))
+    total_images_perclass = int(len(os.listdir(os.path.join(source_dir, malades_classes[0])))*ratio_sample)
     images_test_count = int(test_ratio * total_images_perclass)
     #images_train_count = int((total_images_perclass - images_test_count)*ratio_sample)
 
@@ -99,7 +99,7 @@ def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', rat
                     'Higher_Density', 'Lower_Density', 'Mediastinal_Changes', 'Obstructive_Pulmonary_Diseases']
     normal_classes = ['Normal']
 
-    normal_total_images = len(os.listdir(os.path.join(source_dir, normal_classes[0])))
+    normal_total_images = int(len(os.listdir(os.path.join(source_dir, normal_classes[0])))*ratio_sample)
     normal_test_count = int(test_ratio * normal_total_images)
     #normal_train_count = int((normal_total_images - normal_test_count)*ratio_sample)
 
