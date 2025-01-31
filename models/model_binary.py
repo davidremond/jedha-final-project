@@ -20,8 +20,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mlflow
 import tensorflow as tf
-from tf.keras.preprocessing.image import ImageDataGenerator
-from tf.keras.callbacks import EarlyStopping
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
 from sklearn.utils.class_weight import compute_class_weight
 
