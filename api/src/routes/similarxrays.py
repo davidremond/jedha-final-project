@@ -3,7 +3,7 @@ import base64
 from fastapi import APIRouter, HTTPException, Query
 from typing import Annotated, List
 from pydantic import Field
-from routes.samplesModels import SimilarXRaysResult
+from routes.similarxraysModels import SimilarXRaysResult
 
 router = APIRouter()
 
