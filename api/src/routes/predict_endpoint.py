@@ -1,14 +1,20 @@
 # une prediction binaire malade/sain puis si malade une prediction à 7 classes
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
-from utils.cache import load_model_cached
+import mlflow
 from routes.predict_models import PredictionResult, PredictionResultItem
 import io
 import numpy as np
 import os
 
-binary_model = load_model_cached(os.environ.get('MODEL_PATH_BINAIRE'))
-multi_class_model = load_model_cached(os.environ.get('MODEL_PATH_MULTI7'))
+
+mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
+model_path_binaire = os.environ.get('MODEL_PATH_BINAIRE')
+model_path_multi = os.environ.get('MODEL_PATH_MULTI7')
+
+mlflow.set_tracking_uri(mlops_server_uri)
+binary_model = mlflow.pyfunc.load_model(model_path_binaire)
+multi_class_model = mlflow.pyfunc.load_model(model_path_multi)
 
 # vérifier si 0 et 1 ok après data augmentation
 class_names_binaire = ["Disease", "Healthy"]

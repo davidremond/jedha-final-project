@@ -2,14 +2,18 @@
 
 from fastapi import APIRouter, File, UploadFile
 from PIL import Image
-from utils.cache import load_model_cached
 from routes.simple_predict_models import PredictionResult, PredictionResultItem
 import io
 import mlflow
 import numpy as np
 import os
 
-model = load_model_cached(os.environ.get('MODEL_PATH'))
+
+mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
+model_path = os.environ.get('MODEL_PATH')
+
+mlflow.set_tracking_uri(mlops_server_uri)
+model = mlflow.pyfunc.load_model(model_path)
 
 class_names = ["Chest changes", "Degenerative infectious diseases", "Encapsulated lesions", "Higher density",
                "Lower density", "Mediastinal changes", "Normal", "Obstructive pulmonary diseases"]

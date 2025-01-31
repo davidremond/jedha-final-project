@@ -5,10 +5,13 @@ import numpy as np
 import os
 import cv2
 from fastapi import APIRouter, File, UploadFile
-from utils.cache import load_model_cached
 from routes.detected_zones_models import DetectedZonesResult
 
-keras_model = load_model_cached(os.environ.get('MODEL_PATH_MULTI7'))
+mlops_server_uri = os.environ.get('MLOPS_SERVER_URI')
+model_path_multi = os.environ.get('MODEL_PATH_MULTI7')
+
+mlflow.set_tracking_uri(mlops_server_uri)
+keras_model = mlflow.keras.load_model(model_path_multi)
 
 # Extract Base Model (if needed)
 def initialize_submodel(keras_model, submodel_index=1):

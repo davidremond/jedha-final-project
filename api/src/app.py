@@ -8,7 +8,7 @@ default_port = os.environ.get('DEFAULT_PORT')
 
 app = FastAPI(title="PulmoAId API", 
               version="1.0.0", 
-              description="Fournit des services de prédiction de la maladie pulmonaire à partir d'images radiologiques.")
+              description="Fournit des services de prédiction de maladies pulmonaires à partir d'images radiologiques.")
 
 @app.exception_handler(Exception)
 async def global_exception_handler(_: Request, ex: Exception):
