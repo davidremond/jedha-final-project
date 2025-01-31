@@ -20,7 +20,7 @@ async def similar_xrays(class_names: Annotated[List[str], Query()] ):
         root_folder = os.path.join(root_folder, 'src')
 
     for class_name in class_names:
-        folder_path = os.path.join(root_folder, f'images/{class_name.lower().replace(' ', '_')}')
+        folder_path = os.path.join(root_folder, f'samples/{class_name.lower().replace(' ', '_')}')
         # Vérifier si le dossier existe
         if not os.path.exists(folder_path):
             raise HTTPException(status_code=500, detail=f"Le dossier pour la classe '{class_name}' n'existe pas.")
