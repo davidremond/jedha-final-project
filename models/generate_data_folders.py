@@ -32,7 +32,6 @@ def replace_spaces_with_underscores(directory):
                 old_path = os.path.join(root, name)
                 new_path = os.path.join(root, new_name)
                 shutil.move(old_path, new_path)
-                print(f"Renamed: {old_path} -> {new_path}")
 
 
 def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):

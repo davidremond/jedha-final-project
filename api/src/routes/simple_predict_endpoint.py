@@ -43,7 +43,6 @@ async def simple_predict(
         key=lambda x: x.Ratio,
         reverse=True
     )
-    print("round=",round(prediction[0][predicted_class]*100, 1))
     result = PredictionResult(
         has_pathology=True if predicted_class != 6 else False,
         prediction=PredictionResultItem(name=class_name, ratio=prediction[0][predicted_class]*100, displayed_ratio=f'{round(prediction[0][predicted_class]*100, 1)} %'),

@@ -54,7 +54,6 @@ async def predict(
             key=lambda x: x.Ratio,
             reverse=True
         )
-        print("round=",round(prediction_binaire[0][predicted_binaire_class]*100, 1))
         result = PredictionResult(
             has_pathology= False,
             prediction=PredictionResultItem(name=class_binaire_name, ratio=prediction_binaire[0][predicted_binaire_class]*100, displayed_ratio=f'{round(prediction_binaire[0][predicted_binaire_class]*100, 1)} %'),
@@ -70,7 +69,6 @@ async def predict(
             key=lambda x: x.Ratio,
             reverse=True
         )
-        print("round=",round(prediction_multi[0][predicted_multi_class]*100, 1))
         result = PredictionResult(
             has_pathology=True,
             prediction=PredictionResultItem(name=class_multi_name, ratio=prediction_multi[0][predicted_multi_class]*100, displayed_ratio=f'{round(prediction_multi[0][predicted_multi_class]*100, 1)} %'),

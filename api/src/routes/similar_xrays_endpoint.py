@@ -27,10 +27,8 @@ async def similar_xrays(class_names: Annotated[List[str], Query()] ):
 
         # Obtenir la liste des fichiers dans le dossier
         images = []
-        print("folder_path=",folder_path)
         files_list = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         for img in files_list:
-            print("img=",img)
             with open(os.path.join(folder_path, img), 'rb') as file:
                 images.append(base64.b64encode(file.read()).decode('utf-8'))
 

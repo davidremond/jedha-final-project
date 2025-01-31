@@ -24,9 +24,6 @@ def initialize_submodel(keras_model, submodel_index=1):
     input_shape = base_model.input_shape[1:]  # Remove batch dimension
     dummy_input = np.random.random((1, *input_shape)).astype(np.float32)
     _ = base_model(dummy_input)  # Call model to initialize
-
-    print(f"Sub-model {base_model.name} initialized successfully.")
-
     return base_model
 
 # Compute Grad-CAM Heatmap
@@ -81,9 +78,6 @@ def apply_gradcam(byte_array, keras_model, layer_name):
     img_array = img.astype(np.float32) / 255.0  # Normalize pixel values
 
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension (1, 128, 128, 3)
-
-    # Debugging print
-    print("Final img_array shape:", img_array.shape)  # Should be (1, 128, 128, 3)
 
     # Generate Grad-CAM heatmap
     heatmap = get_gradcam_heatmap(keras_model, img_array, layer_name)

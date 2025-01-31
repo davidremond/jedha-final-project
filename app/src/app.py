@@ -118,7 +118,6 @@ with col3:
         class_names = [f"class_names={item['name'].lower()}" for item in result['ranking'] if item['ratio'] > 0.1]
         class_names = str.join("&", class_names)
         with st.spinner('Pending analysis...'):
-            print(f'{api_url}?{class_names}')
             response = requests.get(f'{api_url}?{class_names}')
         xrays_result = response.json()
         
