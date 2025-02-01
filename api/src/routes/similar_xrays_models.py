@@ -3,7 +3,7 @@ from typing import List, Dict
 
 class SimilarXRaysResult(BaseModel):
     """
-    Similary XRay result
+    Similary XRay result.
     """
         
     Samples : Dict[str, List[str]] = Field(
