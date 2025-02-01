@@ -60,7 +60,7 @@ def main():
     CLASSES = 7
     EPOCHS = 20
     TRAINER = 'final_models' 
-    MODEL_TYPE = 'finalmodel_multi7_testEugenie' # Le type de modèle utilisé
+    MODEL_TYPE = 'finalmodel_multi7_v4' # Le type de modèle utilisé
     mlflow.set_tracking_uri(MLFLOW_SERVER_URI)
     mlflow.set_experiment(EXPERIMENT_NAME)
     mlflow.tensorflow.autolog()
