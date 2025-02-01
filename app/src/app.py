@@ -5,6 +5,9 @@ import streamlit as st
 import base64
 from PIL import Image
 
+GREEN_COLOR = "#4CAF50"
+RED_COLOR = "#FF6347"
+
 st.set_page_config( 
     page_title="PulmoAId",
     layout='wide',
@@ -20,8 +23,6 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-st.title("PulmoAId", anchor=False)
-
 # Fonction pour convertir une image locale en base64
 def get_base64_image(image_path):
     print(image_path)
@@ -30,6 +31,7 @@ def get_base64_image(image_path):
 
 # Chemins des images
 SPLASH_IMAGE = "src/images/image_splash_screen.jpg"
+IMAGE_0 = "src/images/image_0.jpg"
 IMAGE_1 = "src/images/image_1.jpg"
 IMAGE_2 = "src/images/image_2.jpg"
 IMAGE_3 = "src/images/image_3.jpg"
@@ -67,8 +69,8 @@ if current_step == "splash":
             background-color: black;
         }}
         .splash-image {{
-            width: 100%;
-            height: 100%;
+            width: 50%;
+            height: 50%;
             object-fit: cover;
         }}
         .text-overlay {{
@@ -93,13 +95,14 @@ if current_step == "splash":
 
 # Étape 2 : Page de Transition
 elif current_step == "transition":
+
     # Ajouter une version centrée et réduite du texte
     st.markdown(
         """
         <style>
         .title-container {
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 20px;
         }
@@ -121,8 +124,8 @@ elif current_step == "transition":
             gap: 10px;
         }
         .image-item {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             position: relative;
         }
         .image-item img {
@@ -133,91 +136,204 @@ elif current_step == "transition":
         .image-caption {
             position: absolute;
             bottom: 0;
-            width: 100%;
+            width: 90%;
             background: rgba(0, 0, 0, 0.5);
             color: white;
             text-align: center;
             padding: 5px;
+            margin:5px;
         }
         </style>
         <div class="title-container">
-            <span>The app that will help you diagnose these</span>
-            <br>
-            <span class="subtitle">7 lung diseases:</span>
+            <span>The app that helps you diagnose these 7 lung diseases</span>
         </div>
         """,
         unsafe_allow_html=True
     )
 
 # Disposition des images en lignes
-    st.markdown(
-        f"""
-        <div class="image-container">
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_1)}" alt="Image 1">
-                <div class="image-caption">Higher density</div>
+
+    st.markdown("""
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            width:80%;
+        }
+        img .normal {
+            height: auto;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 10px;
+            display: block;
+        }
+    </style>""", 
+    unsafe_allow_html=True)
+    _, col2, col3, col4, col5, _ = st.columns(6, gap="small", vertical_alignment="top", border=False)
+
+    with col2:
+        st.markdown(f"""
+            <div style="border: 2px solid {GREEN_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_0)}" style="border-color:#4CAF50" alt="Image 0">
+                <div class="image-caption">Normal</div>
             </div>
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_2)}" alt="Image 2">
-                <div class="image-caption">Lower density</div>
-            </div>
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_3)}" alt="Image 3">
-                <div class="image-caption">Chest changes</div>
-            </div>
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_4)}" alt="Image 4">
+            """, unsafe_allow_html=True)        
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_4)}" style="border-color:#4CAF50" alt="Image 4">
                 <div class="image-caption">Encapsulated Lesions</div>
             </div>
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_5)}" alt="Image 5">
+            """, unsafe_allow_html=True)        
+
+    with col3:
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_1)}" style="border-color:#4CAF50" alt="Image 1">
+                <div class="image-caption">Higher density</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_5)}" style="border-color:#4CAF50" alt="Image 2">
                 <div class="image-caption">Obstructive Pulmonary Diseases</div>
             </div>
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_6)}" alt="Image 6">
+            """, unsafe_allow_html=True)
+
+    with col4:
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_2)}" style="border-color:#4CAF50" alt="Image 2">
+                <div class="image-caption">Lower density</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_6)}" style="border-color:#4CAF50" alt="Image 6">
                 <div class="image-caption">Mediastinal Changes</div>
             </div>
-            <div class="image-item">
-                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_7)}" alt="Image 7">
+            """, unsafe_allow_html=True)
+
+    with col5:
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_3)}" style="border-color:#4CAF50" alt="Image 3">
+                <div class="image-caption">Chest changes</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="border: 2px solid {RED_COLOR};
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                text-align: right;">
+                <img src="data:image/jpeg;base64,{get_base64_image(IMAGE_7)}" style="border-color:#4CAF50" alt="Image 7">
                 <div class="image-caption">Degenerative Infectious Diseases</div>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+            """, unsafe_allow_html=True)
 
-# Liste des créateurs
+
+
+    # Liste des créateurs
     st.markdown(
     """
-    <style>
-    .creator-list {
-        text-align: center;
-        font-size: 1.25rem;
-        font-weight: bold;
-        color: white;
-        margin-top: 55px;
-    }
-    </style>
-    <div class="creator-list">
-        <ul style="list-style-type: none; padding: 0; margin: 0;">
-            <li>Made by:</li>
-            <li>Sophie Laussel</li>
-            <li>Eugénie Modolo</li>
-            <li>Juliette Rodrigues</li>
-            <li>David Remond</li>
-        </ul>
+    <div class="title-container" style="margin-top: 20px;">
+        <span>Designed and develop by</span>
     </div>
     """,
-    unsafe_allow_html=True
-)
+    unsafe_allow_html=True)
+
+    _, col2, col3, col4, col5, _ = st.columns(6, gap="small", vertical_alignment="top", border=False)
+
+    st.markdown("""
+    <style>
+        .circle-image {
+            width: 48px;  /* Vous pouvez ajuster la largeur selon vos besoins */
+            height: 48px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+            border-radius: 50%;  /* Crée un cercle */
+            overflow: hidden;    /* Masque tout débordement pour garder la forme ronde */
+            border: 2px solid #000; /* Ajout d'une bordure noire */
+        }
+        .circle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;  /* Assure que l'image couvre bien le cercle */
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+                    <div align="center">
+                        <div class="circle-image">
+                            <img src="https://avatars.githubusercontent.com/u/133383415?v=4" />
+                        </div>
+                        Sophie Laussel
+                    </div>
+                    """, unsafe_allow_html=True)
+    with col3:
+        st.markdown("""
+                    <div align="center">
+                        <div class="circle-image">
+                            <img src="https://avatars.githubusercontent.com/u/186730964?v=4" />
+                        </div>
+                        Eugénie Modolo
+                    </div>
+                    """, unsafe_allow_html=True)
+    with col4:
+        st.markdown("""
+                    <div align="center">
+                        <div class="circle-image">
+                            <img src="https://avatars.githubusercontent.com/u/93288511?v=4" />
+                        </div>
+                        Juliette Rodrigues
+                    </div>
+                    """, unsafe_allow_html=True)
+    with col5:
+        st.markdown("""
+                    <div align="center">
+                        <div class="circle-image">
+                            <img src="https://avatars.githubusercontent.com/u/80923468?v=4" />
+                        </div>
+                        David Remond
+                    </div>
+                    """, unsafe_allow_html=True)
+        st.markdown("", unsafe_allow_html=True)
+
 
     auto_refresh("main", delay=6000)
     
 # Étape 3 : Page principale
 elif current_step == "main":
         API_BASE_URL = os.getenv("API_BASE_URL")
-        GREEN_COLOR = "#4CAF50"
-        RED_COLOR = "#FF6347"
 
         st.title("PulmoAId", anchor=False)
 
@@ -311,7 +427,7 @@ elif current_step == "main":
                 
                 # Get similar xrays
                 api_url = f"{API_BASE_URL}/similar_xrays"
-                class_names = [f"class_names={item['name'].lower()}" for item in result['ranking'] if item['ratio'] > 0.1]
+                class_names = [f"class_names={item['name'].lower()}" for item in result['ranking'] if item['ratio'] > 20]
                 class_names = str.join("&", class_names)
                 with st.spinner('Pending analysis...'):
                     response = requests.get(f'{api_url}?{class_names}')
