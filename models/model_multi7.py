@@ -60,7 +60,7 @@ def main():
     CLASSES = 7
     EPOCHS = 20
     TRAINER = 'final_models' 
-    MODEL_TYPE = 'finalmodel_multi7_v3' # Le type de modèle utilisé
+    MODEL_TYPE = 'finalmodel_multi7_testEugenie' # Le type de modèle utilisé
     mlflow.set_tracking_uri(MLFLOW_SERVER_URI)
     mlflow.set_experiment(EXPERIMENT_NAME)
     mlflow.tensorflow.autolog()
@@ -74,14 +74,16 @@ def main():
                                                      weights = "imagenet",
                                                      name="InceptionV3",
                                                     )
-    base_model.trainable = False
-    fine_tune_at = 20
-    for layer in base_model.layers[-fine_tune_at:]:
+    base_model.trainable = True
+    fine_tune_at = len(base_model.layers) - 20
+    for layer in base_model.layers[:fine_tune_at]:
+        layer.trainable = False
+    for layer in base_model.layers[fine_tune_at:]:
         layer.trainable = True
     
     model = tf.keras.Sequential([
         tf.keras.layers.Input(shape=(224, 224, 1)),
-        tf.keras.layers.Conv2D(3, (1, 1)),
+        #tf.keras.layers.Conv2D(3, (1, 1)),
         base_model, 
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(CLASSES, activation="softmax")  

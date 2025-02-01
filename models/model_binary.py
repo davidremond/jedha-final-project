@@ -84,9 +84,11 @@ def main():
                                                      weights = "imagenet",
                                                      name="VGG19",
                                                     )
-    base_model.trainable = False
-    fine_tune_at = 20
-    for layer in base_model.layers[-fine_tune_at:]:
+    base_model.trainable = True
+    fine_tune_at = len(base_model.layers) - 20
+    for layer in base_model.layers[:fine_tune_at]:
+        layer.trainable = False
+    for layer in base_model.layers[fine_tune_at:]:
         layer.trainable = True
     
     model = tf.keras.Sequential([
