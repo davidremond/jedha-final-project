@@ -104,7 +104,14 @@ async def detected_zones(
                             title="X-ray Image File", 
                             include_in_schema=False)
     ):
+    """Compute detected zones in the X-ray image with gradcam algorithm.
 
+    Args:
+        file: X-ray image file.
+
+    Returns:
+        DetectedZonesResult: Result of the detection
+    """
     base_model = initialize_submodel(keras_model, submodel_index=1)
     last_conv_layer_name = "mixed7"
     byte_array = await file.read()
