@@ -37,6 +37,7 @@ def preprocessing():
         target_size=(224, 224),
         batch_size=32,
         class_mode='categorical',
+        color_mode="grayscale",
         subset="training",
         seed = 42
     )
@@ -46,7 +47,9 @@ def preprocessing():
         target_size=(224, 224),
         batch_size=32,
         class_mode='categorical',
+        color_mode="grayscale",
         subset="validation",
+        shuffle=False,
         seed = 42
     )
 
@@ -83,7 +86,7 @@ def main():
     
     model = tf.keras.Sequential([
         tf.keras.layers.Input(shape=(224, 224, 1)),
-        #tf.keras.layers.Conv2D(3, (1, 1)),
+        tf.keras.layers.Conv2D(3, (1, 1)),
         base_model, 
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(CLASSES, activation="softmax")  
@@ -133,7 +136,7 @@ def main():
     report = classification_report(y_true, y_pred)
     with open("classification_report.txt", "w") as file:
         file.write(report)
-    report = classification_report(y_true, y_pred, output_dict=True)
+    report = classification_report(y_pred, y_true, output_dict=True)
     mlflow.log_artifact('classification_report.txt', artifact_path="model")
     mlflow.log_metric('global_accuracy', report['accuracy'])
     mlflow.log_metric('macro_avg_precision', report['macro avg']['precision'])
@@ -151,7 +154,7 @@ def main():
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=img_generator_flow_valid.class_indices.keys())
     disp.plot()
     plt.title("Matrice de Confusion")
-    plt.xticks(rotation=45)
+    plt.xticks(rotation=90)
     plt.savefig("confusion_matrix.png")
     mlflow.log_artifact("confusion_matrix.png", artifact_path='model')
     mlflow.end_run()
