@@ -15,9 +15,9 @@ mlflow.set_tracking_uri(mlops_server_uri)
 binary_model = mlflow.pyfunc.load_model(model_path_binaire)
 multi_class_model = mlflow.pyfunc.load_model(model_path_multi)
 
-class_names_binaire = ["Disease", 
-                       "Healthy"]
-class_names_multi = ["Chest changes", 
+binary_class_names = ["Healthy",
+                      "Disease"]
+multi_class_names = ["Chest changes", 
                      "Degenerative infectious diseases", 
                      "Encapsulated lesions", 
                      "Higher density",
@@ -44,42 +44,50 @@ async def predict(
         PredictionResult: Result of the prediction
     """
     contents = await file.read()
-    image_binaire = Image.open(io.BytesIO(contents)).convert('RGB')
-    image_multi = Image.open(io.BytesIO(contents)) 
-    image_binaire = image_binaire.resize((128, 128))
-    image_binaire_array = np.array(image_binaire)
-    image_binaire_array = image_binaire_array / 255.0
-    image_binaire_array = np.expand_dims(image_binaire_array, axis=0)
-    image_multi = image_multi.resize((128,128))
-    image_multi_array = np.array(image_multi)
-    image_multi_array = image_multi_array / 255.0
-    image_multi_array = np.expand_dims(image_multi_array, axis=0)
-    prediction_binaire = binary_model.predict(image_binaire_array)
-    predicted_binaire_class = np.argmax(prediction_binaire) 
-    class_binaire_name = class_names_binaire[predicted_binaire_class]
-    if class_binaire_name == 'Healthy':
+    binary_image = Image.open(io.BytesIO(contents)).convert('RGB')
+    binary_image = binary_image.resize((128, 128))
+    binary_image_array = np.array(binary_image)
+    binary_image_array = binary_image_array / 255.0
+    binary_image_array = np.expand_dims(binary_image_array, axis=0)
+    binary_prediction = binary_model.predict(binary_image_array)
+    binary_prediction_class = np.argmax(binary_prediction) 
+    binary_prediction_class_name = binary_class_names[binary_prediction_class]
+    if binary_prediction_class_name == 'Healthy':
         ranking = sorted(
-            [PredictionResultItem(name=class_names_binaire[i], ratio=conf * 100, displayed_ratio=f'{round(float(conf * 100), 1)} %') for i, conf in enumerate(prediction_binaire[0])],
+            [PredictionResultItem(name=binary_class_names[i], 
+                                  ratio=conf * 100,
+                                  displayed_ratio=f'{round(float(conf * 100), 1)} %') for i, conf in enumerate(binary_prediction[0])],
             key=lambda x: x.Ratio,
             reverse=True
         )
         result = PredictionResult(
             has_pathology= False,
-            prediction=PredictionResultItem(name=class_binaire_name, ratio=prediction_binaire[0][predicted_binaire_class]*100, displayed_ratio=f'{round(prediction_binaire[0][predicted_binaire_class]*100, 1)} %'),
+            prediction=PredictionResultItem(name=binary_prediction_class_name, 
+                                            ratio=binary_prediction[0][binary_prediction_class]*100, 
+                                            displayed_ratio=f'{round(binary_prediction[0][binary_prediction_class]*100, 1)} %'),
             ranking=ranking
         )
     else:
-        prediction_multi = multi_class_model.predict(image_multi_array)
-        predicted_multi_class = np.argmax(prediction_multi) 
-        class_multi_name = class_names_multi[predicted_multi_class]
+        multi_image = Image.open(io.BytesIO(contents)).convert('L')
+        multi_image = multi_image.resize((128,128))
+        multi_image_array = np.array(multi_image)
+        multi_image_array = multi_image_array / 255.0
+        multi_image_array = np.expand_dims(multi_image_array, axis=0)
+        multi_prediction = multi_class_model.predict(multi_image_array)
+        multi_prediction_class = np.argmax(multi_prediction) 
+        multi_prediction_class_name = multi_class_names[multi_prediction_class]
         ranking = sorted(
-            [PredictionResultItem(name=class_names_multi[i], ratio=conf * 100, displayed_ratio=f'{round(float(conf * 100), 1)} %') for i, conf in enumerate(prediction_multi[0])],
+            [PredictionResultItem(name=multi_class_names[i], 
+                                  ratio=conf * 100, 
+                                  displayed_ratio=f'{round(float(conf * 100), 1)} %') for i, conf in enumerate(multi_prediction[0])],
             key=lambda x: x.Ratio,
             reverse=True
         )
         result = PredictionResult(
             has_pathology=True,
-            prediction=PredictionResultItem(name=class_multi_name, ratio=prediction_multi[0][predicted_multi_class]*100, displayed_ratio=f'{round(prediction_multi[0][predicted_multi_class]*100, 1)} %'),
+            prediction=PredictionResultItem(name=multi_prediction_class_name, 
+                                            ratio=multi_prediction[0][multi_prediction_class]*100, 
+                                            displayed_ratio=f'{round(multi_prediction[0][multi_prediction_class]*100, 1)} %'),
             ranking=ranking
         )
     return result

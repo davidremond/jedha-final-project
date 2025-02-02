@@ -377,7 +377,7 @@ elif current_step == "main":
             if uploaded_file is not None:
                 # Run prediction
                 bytes_data = uploaded_file.getvalue()
-                api_url = f"{API_BASE_URL}/simple_predict"
+                api_url = f"{API_BASE_URL}/predict"
                 files = {'file': (uploaded_file.name, bytes_data, uploaded_file.type)}
                 with st.spinner('Pending analysis...'):
                     response = requests.post(api_url, files=files)
