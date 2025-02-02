@@ -74,18 +74,18 @@ if current_step == "splash":
         }}
         .splash-image {{
             width: 50%;
-            height: 50%;
+            height: 80%;
             object-fit: cover;
         }}
         .text-overlay {{
             position: absolute;
-            bottom: 7%;
+            bottom: 11%;
             color: white;
-            font-size: 6rem;
+            font-size: 4.5rem;
             font-weight: bold;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
             text-align: center;
-            width: 100%;
+            width: 50%;
         }}
         </style>
         <div class="splash-container">
@@ -108,7 +108,8 @@ elif current_step == "transition":
             text-align: center;
             font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
+            margin-top: 30px;
         }
         .subtitle {
             font-size: 2rem; 
@@ -269,7 +270,7 @@ elif current_step == "transition":
     # Liste des créateurs
     st.markdown(
     """
-    <div class="title-container" style="margin-top: 20px;">
+    <div class="title-container" style="margin-top: 40px;">
         <span>Designed and develop by</span>
     </div>
     """,
@@ -280,16 +281,16 @@ elif current_step == "transition":
     st.markdown("""
     <style>
         .circle-image {
-            width: 48px;  /* Vous pouvez ajuster la largeur selon vos besoins */
-            height: 48px; /* Vous pouvez ajuster la hauteur selon vos besoins */
-            border-radius: 50%;  /* Crée un cercle */
-            overflow: hidden;    /* Masque tout débordement pour garder la forme ronde */
-            border: 2px solid #000; /* Ajout d'une bordure noire */
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #000;
         }
         .circle-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;  /* Assure que l'image couvre bien le cercle */
+            object-fit: cover;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -332,6 +333,38 @@ elif current_step == "transition":
                     """, unsafe_allow_html=True)
         st.markdown("", unsafe_allow_html=True)
 
+    # Barre de chargement
+    st.markdown(
+        """
+        <style>
+        .loading-bar-container {
+            width: 15%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background: #A9A9A9;
+            animation: loadingAnimation 6s linear forwards;
+        }
+
+        @keyframes loadingAnimation {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        </style>
+
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     auto_refresh("main", delay=6000)
     
