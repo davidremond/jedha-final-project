@@ -30,15 +30,19 @@ def get_base64_image(image_path):
         return base64.b64encode(img_file.read()).decode("utf-8")
 
 # Chemins des images
-SPLASH_IMAGE = "src/images/image_splash_screen.jpg"
-IMAGE_0 = "src/images/image_0.jpg"
-IMAGE_1 = "src/images/image_1.jpg"
-IMAGE_2 = "src/images/image_2.jpg"
-IMAGE_3 = "src/images/image_3.jpg"
-IMAGE_4 = "src/images/image_4.jpg"
-IMAGE_5 = "src/images/image_5.jpg"
-IMAGE_6 = "src/images/image_6.jpg"
-IMAGE_7 = "src/images/image_7.jpg"
+root_folder = os.getcwd()
+subdir = os.listdir(root_folder)
+if subdir.count('src') == 1:
+    root_folder = os.path.join(root_folder, 'src')
+SPLASH_IMAGE = f"{root_folder}/images/image_splash_screen.jpg"
+IMAGE_0 = f"{root_folder}/images/image_0.jpg"
+IMAGE_1 = f"{root_folder}/images/image_1.jpg"
+IMAGE_2 = f"{root_folder}/images/image_2.jpg"
+IMAGE_3 = f"{root_folder}/images/image_3.jpg"
+IMAGE_4 = f"{root_folder}/images/image_4.jpg"
+IMAGE_5 = f"{root_folder}/images/image_5.jpg"
+IMAGE_6 = f"{root_folder}/images/image_6.jpg"
+IMAGE_7 = f"{root_folder}/images/image_7.jpg"
 
 # Convertir les images nécessaires en base64
 splash_image_base64 = get_base64_image(SPLASH_IMAGE)
