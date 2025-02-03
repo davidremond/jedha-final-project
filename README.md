@@ -68,6 +68,7 @@ pip install -r requirements.txt
 ### Ajout de dépendances
 
 Vérifier que l'environnement virtuel est activé.
+
 Les commandes suivantes installent les librairies dans l'environnement virtuel actif et ajoute celles-ci au fichier requirements.txt.
 
 ```
