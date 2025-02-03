@@ -74,10 +74,10 @@ def apply_gradcam(byte_array, keras_model, layer_name):
     img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
-    img = cv2.resize(img, (128, 128))  # Resize to match model input
+    img = cv2.resize(img, (224, 224))  # Resize to match model input
     img_array = img.astype(np.float32) / 255.0  # Normalize pixel values
 
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension (1, 128, 128, 3)
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension (1, 224, 224, 3)
 
     # Generate Grad-CAM heatmap
     heatmap = get_gradcam_heatmap(keras_model, img_array, layer_name)
