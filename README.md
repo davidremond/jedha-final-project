@@ -32,10 +32,14 @@ Les sources sont organisés de la manière suivante :
    - *src* : sources de l'API
  - *app* : image Docker, dépendances de l'application, scripts d'exécution et documentation
    - *src* : sources de l'application
+ - *artifacts* : liens vers les modèles de production
  - *infra* : élements d'infrastructure nécessaires au projet
    - *mlflow-server* : image Docker, dépendances du serveur mlflow et documentation
  - *models* : modèles sélectionnés et utilisés en production
+   - *tests* : tests des modèles sélectionnés
+   - *demo* : video and xray images for demo
  - *notebooks* : éléments d'explorations de données et de test d'éligibilité des modèles
+
 
 ## Environnement local
 
@@ -66,6 +70,7 @@ pip install -r requirements.txt
 ### Ajout de dépendances
 
 Vérifier que l'environnement virtuel est activé.
+
 Les commandes suivantes installent les librairies dans l'environnement virtuel actif et ajoute celles-ci au fichier requirements.txt.
 
 ```
