@@ -32,10 +32,12 @@ Les sources sont organisés de la manière suivante :
    - *src* : sources de l'API
  - *app* : image Docker, dépendances de l'application, scripts d'exécution et documentation
    - *src* : sources de l'application
+ - *artifacts* : liens vers les modèles de production
  - *infra* : élements d'infrastructure nécessaires au projet
    - *mlflow-server* : image Docker, dépendances du serveur mlflow et documentation
  - *models* : modèles sélectionnés et utilisés en production
  - *notebooks* : éléments d'explorations de données et de test d'éligibilité des modèles
+ - *tests* : tests des modèles sélectionnés et utilisés en production
 
 ## Environnement local
 
