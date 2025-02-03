@@ -37,6 +37,7 @@ Les sources sont organisés de la manière suivante :
    - *mlflow-server* : image Docker, dépendances du serveur mlflow et documentation
  - *models* : modèles sélectionnés et utilisés en production
    - *tests* : tests des modèles sélectionnés
+   - *demo* : video and xray images for demo
  - *notebooks* : éléments d'explorations de données et de test d'éligibilité des modèles
 
 
