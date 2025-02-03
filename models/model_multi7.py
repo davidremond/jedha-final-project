@@ -1,20 +1,3 @@
-"""
-    Load the dataset from a CSV file.
-
-    Parameters
-    ----------
-    file_path : str
-        Path to the dataset file.
-
-    Returns
-    -------
-    pd.DataFrame
-        Loaded dataset as a Pandas DataFrame.
-
-    """
-
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -26,6 +9,13 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classifica
 from sklearn.utils.class_weight import compute_class_weight
 
 def preprocessing():
+
+    """
+    Prépare les générateurs d'images pour l'entraînement et la validation.
+
+    Returns:
+        tuple: Un tuple contenant les générateurs d'images pour l'entraînement et la validation.
+    """
 
     img_generator = ImageDataGenerator(
         rescale=1/255.,
@@ -58,12 +48,22 @@ def preprocessing():
 
 def main():
 
+    """
+    Fonction principale pour l'entraînement et l'évaluation d'un modèle de classification binaire.
+
+    Cette fonction configure MLflow pour le suivi des expériences, prépare les données,
+    construit et entraîne un modèle de classification binaire, puis enregistre les métriques et les artefacts dans MLflow.
+
+    Returns:
+        None
+    """
+
     MLFLOW_SERVER_URI = 'https://david-rem-jedha-final-project-mlops.hf.space'
     EXPERIMENT_NAME = 'multi' 
     CLASSES = 7
     EPOCHS = 20
     TRAINER = 'final_models' 
-    MODEL_TYPE = 'finalmodel_multi7_v4' # Le type de modèle utilisé
+    MODEL_TYPE = 'finalmodel_multi7_v4' 
     mlflow.set_tracking_uri(MLFLOW_SERVER_URI)
     mlflow.set_experiment(EXPERIMENT_NAME)
     mlflow.tensorflow.autolog()
@@ -107,9 +107,9 @@ def main():
     )
 
     early_stopping = EarlyStopping(
-        monitor='val_loss',  # Surveiller la loss de validation
-        patience=5,          # Nombre d'époques sans amélioration avant d'arrêter
-        restore_best_weights=True  # Rétablir les poids du meilleur modèle
+        monitor='val_loss',
+        patience=5,
+        restore_best_weights=True 
     )
 
     history = model.fit(

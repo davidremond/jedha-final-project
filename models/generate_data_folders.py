@@ -1,22 +1,3 @@
-"""
-    Load the dataset from a CSV file.
-
-    Parameters
-    ----------
-    file_path : str
-        Path to the dataset file.
-
-ratio_malade : >= 0.5 for imbalanced data
-test_ratio : we put 20% in this folder for testing later on
-ratio_sample : set to 0.20 for light model training, to 1 for training on the whole dataset (70000 images minus the test samples)
-
-    Returns
-    -------
-    pd.DataFrame
-        Loaded dataset as a Pandas DataFrame.
-
-    """
-
 import os
 import random
 import shutil
@@ -25,6 +6,16 @@ import subprocess
 
 def replace_spaces_with_underscores(directory):
 
+    """
+    Remplace les espaces par des underscores dans les noms de dossiers d'un répertoire donné.
+
+    Args:
+        directory (str): Le chemin du répertoire dans lequel les noms de dossiers doivent être modifiés.
+
+    Returns:
+        None
+    """
+
     for root, dirs, files in os.walk(directory, topdown=False):
         for name in dirs:
             new_name = name.replace(' ', '_')
@@ -32,10 +23,22 @@ def replace_spaces_with_underscores(directory):
                 old_path = os.path.join(root, name)
                 new_path = os.path.join(root, new_name)
                 shutil.move(old_path, new_path)
-                #print(f"Renamed: {old_path} -> {new_path}")
 
 
 def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
+
+    """
+    Crée des dossiers pour un échantillon multiclasses de données avec un ratio spécifié pour les images du test.
+
+    Args:
+        test_ratio (float): Le ratio des images de test par rapport aux images totales.
+        source_dir (str): Le chemin du répertoire source contenant les images.
+        ratio_sample (float): Le ratio d'échantillonnage des images : si <1 (par exemple 
+            0.2 pour un entraînement léger), une partie des images ne sera pas mise dans un dossier.
+
+    Returns:
+        None
+    """
 
     random.seed(42) 
     multi_sample_dir = str(source_dir)+"_Sample_Multi7"
@@ -54,7 +57,6 @@ def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
 
     total_images_perclass = int(len(os.listdir(os.path.join(source_dir, malades_classes[0])))*ratio_sample)
     images_test_count = int(test_ratio * total_images_perclass)
-    #images_train_count = int((total_images_perclass - images_test_count)*ratio_sample)
 
     for class_name in malades_classes:
         class_path = os.path.join(source_dir, class_name)
@@ -79,9 +81,25 @@ def create_folders_multi7(test_ratio=0.2, source_dir='', ratio_sample=1):
 
 def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', ratio_sample=1):
 
+    """
+    Crée des dossiers pour un échantillon binaire de données avec des ratios spécifiés pour les images malades et de test.
+
+    Args:
+        ratio_malade (float): Le ratio des images malades par rapport aux images normales : si >= 0.5, le modèle binaire s'entraînera sur des données imbalanced. 
+            Faire attention à de possibles incompatibilités entre ratio_malade et ratio_sample (pas 
+            assez d'images dans le dataset pour répondre aux deux conditions en même temps).
+        test_ratio (float): Le ratio des images de test par rapport aux images totales.
+        source_dir (str): Le chemin du répertoire source contenant les images.
+        ratio_sample (float): Le ratio d'échantillonnage des images : si <1 (par exemple 
+            0.2 pour un entraînement léger), une partie des images ne sera pas mise dans un dossier.
+
+    Returns:
+        None
+    """
+
     random.seed(42) 
-    binary_sample_dir = str(source_dir)+"_Sample_Binaire_With_Ratio"
-    binary_sample_test_dir = str(source_dir)+"_Sample_Binaire_Test"
+    binary_sample_dir = str(source_dir)+"_Sample_Binary_With_Ratio"
+    binary_sample_test_dir = str(source_dir)+"_Sample_Binary_Test"
 
     os.makedirs(binary_sample_dir, exist_ok=True)
     normal_dir = os.path.join(binary_sample_dir, "Normal")
@@ -101,15 +119,10 @@ def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', rat
 
     normal_total_images = int(len(os.listdir(os.path.join(source_dir, normal_classes[0])))*ratio_sample)
     normal_test_count = int(test_ratio * normal_total_images)
-    #normal_train_count = int((normal_total_images - normal_test_count)*ratio_sample)
 
     malades_total_images = normal_total_images * 7
     malades_tokeep_images = int(normal_total_images*ratio_malade/(1-ratio_malade))  
     malades_test_count = int(test_ratio * malades_tokeep_images)
-    #malades_train_count = int((malades_tokeep_images - malades_test_count)*ratio_sample)
-    #if malades_train_count < malades_total_images*ratio_sample:
-    #    print(f"pas assez d'images de malades pour ces ratio de malades ({ratio_malade} %) \
-    #        et de test ({test_ratio} %) : modifiez ces ratio")
 
     for class_name in normal_classes:
         class_path = os.path.join(source_dir, class_name)
@@ -150,6 +163,20 @@ def create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir='', rat
 
 
 def main():
+
+    """
+    Fonction principale qui télécharge un dataset depuis Kaggle, décompresse les fichiers,
+    remplace les espaces par des underscores dans les noms de dossiers,
+    et crée des dossiers pour les deux types de modèles :
+    - modèle binaire : crée le dossier "Main_dataset_Sample_Binary_With_Ratio" pour l'entraînement et la validation 
+        avec 80% des images, et le dossier "Main_dataset_Sample_Binary_Test" avec 20% des images pour les tests
+    - modèle multiclasses (7 classes): crée le dossier "Main_dataset_Sample_Multi7" pour l'entraînement et la validation 
+        avec 80% des images, et le dossier "Main_dataset_Sample_Multi7_Test" avec 20% des images pour les tests.
+
+    Returns:
+        None
+    """
+
     command1 = "kaggle datasets download -d ghostbat101/lung-x-ray-image-clinical-text-dataset -p data"
     result1 = subprocess.run(command1, shell=True, capture_output=True, text=True)
     if result1.returncode != 0:
@@ -158,6 +185,7 @@ def main():
     result2 = subprocess.run(command2, shell=True, capture_output=True, text=True)
     if result2.returncode != 0:
         print("Error while loading the dataset: \n", result2.stderr)
+    
     replace_spaces_with_underscores('data')
     create_folders_multi7(test_ratio=0.2, source_dir="data/Main_dataset", ratio_sample=1)
     create_folders_binary(ratio_malade=0.875, test_ratio=0.2, source_dir="data/Main_dataset", ratio_sample=1)
