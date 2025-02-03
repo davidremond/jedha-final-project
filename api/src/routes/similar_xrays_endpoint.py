@@ -8,6 +8,7 @@ router = APIRouter()
 
 @router.get("/similar_xrays", 
             response_model=SimilarXRaysResult,
+            tags=["Repository"],
             description="Return sample x-rays images depending on requested class names.")
 async def similar_xrays(class_names: Annotated[List[str], Query()] ):
     """Return sample x-rays images depending on requested class names.

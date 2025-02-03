@@ -175,7 +175,7 @@ elif current_step == "transition":
         }
     </style>""", 
     unsafe_allow_html=True)
-    _, col2, col3, col4, col5, _ = st.columns(6, gap="small", vertical_alignment="top", border=False)
+    _, col2, col3, col4, col5, _ = st.columns([2,1,1,1,1,2], gap="small", vertical_alignment="top", border=False)
 
     with col2:
         st.markdown(f"""

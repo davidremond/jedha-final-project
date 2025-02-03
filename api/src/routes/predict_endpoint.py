@@ -15,8 +15,8 @@ mlflow.set_tracking_uri(mlops_server_uri)
 binary_model = mlflow.pyfunc.load_model(model_path_binaire)
 multi_class_model = mlflow.pyfunc.load_model(model_path_multi)
 
-binary_class_names = ["Healthy",
-                      "Disease"]
+binary_class_names = ["Disease",
+                      "Healthy"]
 multi_class_names = ["Chest changes", 
                      "Degenerative infectious diseases", 
                      "Encapsulated lesions", 
@@ -29,6 +29,7 @@ router = APIRouter()
 
 @router.post("/predict", 
              response_model=PredictionResult,
+             tags=["Predictions"],
              description="Predict if the X-ray image has a pathology, and if yes predicts which one (among 7 pathologies).")
 async def predict(
     file: UploadFile = File(..., 
@@ -44,8 +45,8 @@ async def predict(
         PredictionResult: Result of the prediction
     """
     contents = await file.read()
-    binary_image = Image.open(io.BytesIO(contents)).convert('RGB')
-    binary_image = binary_image.resize((128, 128))
+    binary_image = Image.open(io.BytesIO(contents)).convert('L')
+    binary_image = binary_image.resize((224, 224))
     binary_image_array = np.array(binary_image)
     binary_image_array = binary_image_array / 255.0
     binary_image_array = np.expand_dims(binary_image_array, axis=0)
@@ -69,7 +70,7 @@ async def predict(
         )
     else:
         multi_image = Image.open(io.BytesIO(contents)).convert('L')
-        multi_image = multi_image.resize((128,128))
+        multi_image = multi_image.resize((224, 224))
         multi_image_array = np.array(multi_image)
         multi_image_array = multi_image_array / 255.0
         multi_image_array = np.expand_dims(multi_image_array, axis=0)
