@@ -36,8 +36,9 @@ Les sources sont organisés de la manière suivante :
  - *infra* : élements d'infrastructure nécessaires au projet
    - *mlflow-server* : image Docker, dépendances du serveur mlflow et documentation
  - *models* : modèles sélectionnés et utilisés en production
+   - *tests* : tests des modèles sélectionnés
  - *notebooks* : éléments d'explorations de données et de test d'éligibilité des modèles
- - *tests* : tests des modèles sélectionnés et utilisés en production
+
 
 ## Environnement local
 
