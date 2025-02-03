@@ -113,7 +113,7 @@ async def detected_zones(
         DetectedZonesResult: Result of the detection
     """
     base_model = initialize_submodel(keras_model, submodel_index=1)
-    last_conv_layer_name = "mixed7"
+    last_conv_layer_name = "mixed8"
     byte_array = await file.read()
     img = apply_gradcam(byte_array, base_model, last_conv_layer_name)
     return DetectedZonesResult(image_with_detected_zones=base64.b64encode(img).decode('utf-8'))
