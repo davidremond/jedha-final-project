@@ -9,6 +9,13 @@ Pour tracer les expérimentations, utiliser les variables d'environnement suivan
 
 # Déploiement
 
-## 
+## Stockage
+
+Créer un stockage S3 sur AWS avec les paramètres suivants :
+- 
+
+Créer une base de données sur AWS avec les paramètres suivants :
+-
 
 
+s
