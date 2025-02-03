@@ -97,6 +97,7 @@ router = APIRouter()
 
 @router.post("/detected_zones", 
             response_model=DetectedZonesResult, 
+            tags=["Predictions"],
             description="Detect zones in the X-ray image.")
 async def detected_zones(
     file: UploadFile = File(..., 

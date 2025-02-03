@@ -25,6 +25,7 @@ router = APIRouter()
 
 @router.post("/simple_predict", 
              response_model=PredictionResult,
+             tags=["Predictions"],
              description="Predict if the X-ray image has a pathology.")
 async def simple_predict(
     file: UploadFile = File(..., description="Upload the X-ray image file here.", title="X-ray Image File", include_in_schema=False)):
